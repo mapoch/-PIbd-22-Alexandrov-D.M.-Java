@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.util.Random;
 
-public class Form {
+public class FormPlane {
 
     ITransport plane;
     JComponent image;
@@ -16,7 +16,13 @@ public class Form {
         plane.DrawObject(g);
     }
 
-    public Form() {
+    public void SetPlane(ITransport new_plane) {
+        image.update(g);
+        this.plane = new_plane;
+        Draw();
+    }
+
+    public FormPlane() {
         JFrame w = new JFrame("Plane");
         w.setLayout(null);
         w.setSize(1100, 647);
