@@ -17,7 +17,7 @@ public class FormPlane {
     }
 
     public void SetPlane(ITransport new_plane) {
-        image.update(g);
+        g = image.getGraphics();
         this.plane = new_plane;
         Draw();
     }
@@ -25,17 +25,17 @@ public class FormPlane {
     public FormPlane() {
         JFrame w = new JFrame("Plane");
         w.setLayout(null);
-        w.setSize(1100, 647);
-        w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        w.setSize(1101, 648);
+        w.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         image = new cImage();
-        image.setSize(675, 488);
+        image.setSize(900, 601);
         image.setBackground(Color.WHITE);
         image.setLocation(0, 0);
         image.setVisible(true);
 
         Button buttonCreateP = new Button("Create plane");
-        buttonCreateP.setLocation(680, 19);
+        buttonCreateP.setLocation(907, 23);
         buttonCreateP.setSize(123, 24);
         buttonCreateP.setVisible(true);
 
@@ -54,7 +54,7 @@ public class FormPlane {
         });
 
         Button buttonCreateB = new Button("Create bomber");
-        buttonCreateB.setLocation(680, 47);
+        buttonCreateB.setLocation(907, 58);
         buttonCreateB.setSize(123, 24);
         buttonCreateB.setVisible(true);
 
@@ -64,7 +64,8 @@ public class FormPlane {
                 image.update(g);
                 Random rnd = new Random();
                 plane = new Plane_bomber(rnd.nextInt(200) + 100, rnd.nextInt(1000) + 1000,
-                        Color.GREEN, Color.RED, true, true, rnd.nextInt(6), rnd.nextInt(3));
+                        Color.GREEN, Color.RED, true, true,
+                        rnd.nextInt(6), rnd.nextInt(3));
                 plane.SetPosition(rnd.nextInt(90) + 10, rnd.nextInt(90) + 10,
                         image.getWidth(), image.getHeight());
 
@@ -73,8 +74,8 @@ public class FormPlane {
         });
 
         JButton buttonMoveUp = new JButton();
-        buttonMoveUp.setLocation(700, 319);
-        buttonMoveUp.setSize(85, 41);
+        buttonMoveUp.setLocation(933, 393);
+        buttonMoveUp.setSize(113, 50);
         buttonMoveUp.setBackground(Color.YELLOW);
         buttonMoveUp.setVisible(true);
         buttonMoveUp.setIcon(new ImageIcon(new ImageIcon("src/com/company/materials/arrow-pointing-top.png")
@@ -88,8 +89,8 @@ public class FormPlane {
         });
 
         JButton buttonMoveDown = new JButton();
-        buttonMoveDown.setLocation(700, 447);
-        buttonMoveDown.setSize(85, 41);
+        buttonMoveDown.setLocation(933, 550);
+        buttonMoveDown.setSize(113, 50);
         buttonMoveDown.setBackground(Color.YELLOW);
         buttonMoveDown.setVisible(true);
         buttonMoveDown.setIcon(new ImageIcon(new ImageIcon("src/com/company/materials/arrow-pointing-bottom.png").
@@ -103,8 +104,8 @@ public class FormPlane {
         });
 
         JButton buttonMoveRight = new JButton();
-        buttonMoveRight.setLocation(761, 365);
-        buttonMoveRight.setSize(41, 77);
+        buttonMoveRight.setLocation(1015, 449);
+        buttonMoveRight.setSize(55, 95);
         buttonMoveRight.setBackground(Color.YELLOW);
         buttonMoveRight.setVisible(true);
         buttonMoveRight.setIcon(new ImageIcon(new ImageIcon("src/com/company/materials/arrow-pointing-right.png").
@@ -118,8 +119,8 @@ public class FormPlane {
         });
 
         JButton buttonMoveLeft = new JButton();
-        buttonMoveLeft.setLocation(680, 365);
-        buttonMoveLeft.setSize(41, 77);
+        buttonMoveLeft.setLocation(907, 449);
+        buttonMoveLeft.setSize(55, 95);
         buttonMoveLeft.setBackground(Color.YELLOW);
         buttonMoveLeft.setVisible(true);
         buttonMoveLeft.setIcon(new ImageIcon(new ImageIcon("src/com/company/materials/arrow-pointing-left.png").
