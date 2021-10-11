@@ -22,67 +22,60 @@ public class Outer_bombs implements Additionals_Draw{
         return this.Amount;
     }
 
-    public void Draw(Graphics2D g, Color color, boolean Back_state, boolean Bombs_state, int X, int Y) {
+    public void Draw(Graphics2D g, Color color, int X, int Y) {
 
         g.setColor(color);
 
-        if (Back_state) {
-            g.drawOval(X + 90, Y + 30, 10, 10);
-            g.drawLine(X + 100, Y + 35, X + 105, Y + 35);
-        }
+        Polygon bomb_plumage;
+        X += 40;
+        switch (Amount) {
+            case Two:
+                Y += 18;
+                for (int i = 0; i < 2; i++) {
+                    bomb_plumage = new Polygon();
+                    bomb_plumage.addPoint(X + 15, Y + 2);
+                    bomb_plumage.addPoint(X + 20, Y - 2);
+                    bomb_plumage.addPoint(X + 20, Y + 8);
 
-        if (Bombs_state) {
-            Polygon bomb_plumage;
-            X += 40;
-            switch (Amount) {
-                case Two:
-                    Y += 18;
-                    for (int i = 0; i < 2; i++) {
-                        bomb_plumage = new Polygon();
-                        bomb_plumage.addPoint(X + 15, Y + 2);
-                        bomb_plumage.addPoint(X + 20, Y - 2);
-                        bomb_plumage.addPoint(X + 20, Y + 8);
+                    g.fillOval(X, Y, 15, 5);
 
-                        g.fillOval(X, Y, 15, 5);
+                    g.fillPolygon(bomb_plumage);
 
-                        g.fillPolygon(bomb_plumage);
+                    Y += 30;
+                }
+                break;
+            case Four:
+                Y += 10;
+                for (int i = 0; i < 4; i++) {
+                    bomb_plumage = new Polygon();
+                    bomb_plumage.addPoint(X + 8, Y + 3);
+                    bomb_plumage.addPoint(X + 12, Y - 2);
+                    bomb_plumage.addPoint(X + 12, Y + 7);
 
-                        Y += 30;
-                    }
-                    break;
-                case Four:
-                    Y += 10;
-                    for (int i = 0; i < 4; i++) {
-                        bomb_plumage = new Polygon();
-                        bomb_plumage.addPoint(X + 8, Y + 3);
-                        bomb_plumage.addPoint(X + 12, Y - 2);
-                        bomb_plumage.addPoint(X + 12, Y + 7);
+                    g.fillOval(X, Y, 8, 6);
 
-                        g.fillOval(X, Y, 8, 6);
+                    g.fillPolygon(bomb_plumage);
 
-                        g.fillPolygon(bomb_plumage);
+                    if (i == 1) Y += 25;
+                    else Y += 10;
+                }
+                break;
+            case Six:
+                Y += 8;
+                for (int i = 0; i < 6; i++) {
+                    bomb_plumage = new Polygon();
+                    bomb_plumage.addPoint(X + 5, Y + 2);
+                    bomb_plumage.addPoint(X + 8, Y - 1);
+                    bomb_plumage.addPoint(X + 8, Y + 6);
 
-                        if (i == 1) Y += 25;
-                        else Y += 10;
-                    }
-                    break;
-                case Six:
-                    Y += 8;
-                    for (int i = 0; i < 6; i++) {
-                        bomb_plumage = new Polygon();
-                        bomb_plumage.addPoint(X + 5, Y + 2);
-                        bomb_plumage.addPoint(X + 8, Y - 1);
-                        bomb_plumage.addPoint(X + 8, Y + 6);
+                    g.fillOval(X, Y, 5, 4);
 
-                        g.fillOval(X, Y, 5, 4);
+                    g.fillPolygon(bomb_plumage);
 
-                        g.fillPolygon(bomb_plumage);
-
-                        if (i == 2) Y += 22;
-                        else Y += 7;
-                    }
-                    break;
-            }
+                    if (i == 2) Y += 22;
+                    else Y += 7;
+                }
+                break;
         }
     }
 }
