@@ -36,7 +36,7 @@ public class FormPlane {
 
         Button buttonCreateP = new Button("Create plane");
         buttonCreateP.setLocation(907, 23);
-        buttonCreateP.setSize(123, 24);
+        buttonCreateP.setSize(164, 30);
         buttonCreateP.setVisible(true);
 
         buttonCreateP.addActionListener(new ActionListener() {
@@ -55,7 +55,7 @@ public class FormPlane {
 
         Button buttonCreateB = new Button("Create bomber");
         buttonCreateB.setLocation(907, 58);
-        buttonCreateB.setSize(123, 24);
+        buttonCreateB.setSize(164, 30);
         buttonCreateB.setVisible(true);
 
         buttonCreateB.addActionListener(new ActionListener() {
