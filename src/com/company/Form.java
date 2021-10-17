@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Form {
 
-    Plane plane;
+    ITransport plane;
     JComponent image;
     Graphics g;
 
@@ -38,8 +38,27 @@ public class Form {
                 g = image.getGraphics();
                 image.update(g);
                 Random rnd = new Random();
-                plane = new Plane(rnd.nextInt(200) + 100, rnd.nextInt(1000) + 1000,
-                        Color.GREEN, Color.RED, true, true, rnd.nextInt(6));
+                plane = new Plane(rnd.nextInt(200) + 100,
+                        rnd.nextInt(1000) + 1000, Color.GREEN);
+                plane.SetPosition(rnd.nextInt(90) + 10, rnd.nextInt(90) + 10,
+                        image.getWidth(), image.getHeight());
+
+                Draw();
+            }
+        });
+
+        Button buttonCreateB = new Button("Create bomber");
+        buttonCreateB.setLocation(680, 47);
+        buttonCreateB.setSize(123, 24);
+        buttonCreateB.setVisible(true);
+
+        buttonCreateB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                g = image.getGraphics();
+                image.update(g);
+                Random rnd = new Random();
+                plane = new Plane_bomber(rnd.nextInt(200) + 100, rnd.nextInt(1000) + 1000,
+                        Color.GREEN, Color.RED, true, true, rnd.nextInt(6), rnd.nextInt(3));
                 plane.SetPosition(rnd.nextInt(90) + 10, rnd.nextInt(90) + 10,
                         image.getWidth(), image.getHeight());
 
@@ -108,6 +127,7 @@ public class Form {
         });
 
         w.add(buttonCreateP);
+        w.add(buttonCreateB);
         w.add(buttonMoveUp);
         w.add(buttonMoveDown);
         w.add(buttonMoveRight);
