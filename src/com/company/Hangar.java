@@ -2,7 +2,7 @@ package com.company;
 import java.awt.*;
 import java.lang.reflect.Array;
 
-public class Formation<TP extends ITransport, TA extends Additionals_Draw> {
+public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
     private final TP[] _places;
 
     private int pictureWidth;
@@ -14,7 +14,7 @@ public class Formation<TP extends ITransport, TA extends Additionals_Draw> {
     private int width;
     private int height;
 
-    public Formation(Class<TP> klass, int picWidth, int picHeight) {
+    public Hangar(Class<TP> klass, int picWidth, int picHeight) {
         width = picWidth / _placeSizeWidth;
         height = picHeight / _placeSizeHeight;
         _places = (TP[])Array.newInstance(klass, width * height);

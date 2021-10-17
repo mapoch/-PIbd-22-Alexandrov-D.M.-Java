@@ -2,16 +2,14 @@ package com.company;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import java.util.Random;
 
-public class FormFormation {
-    private  Formation<Plane, Additionals_Draw>formation;
+public class FormHangar {
+    private Hangar<Plane, Additionals_Draw> hangar;
     JComponent img;
     Graphics gf;
 
-    public FormFormation() {
+    public FormHangar() {
         JFrame w = new JFrame("Formation");
         w.setLayout(null);
         w.setSize(1101, 648);
@@ -33,13 +31,13 @@ public class FormFormation {
                 Color mColor = JColorChooser.showDialog(w, "Selection", Color.green);
                 if (mColor != null) {
                     Plane plane = new Plane(100, 1000, mColor);
-                    int num = formation.Add(plane);
+                    int num = hangar.Add(plane);
                     if (num != -1) {
                         img.update(gf);
                         JOptionPane.showMessageDialog(w, "Place " + num + " taken");
                         Draw();
                     } else {
-                        JOptionPane.showMessageDialog(w, "The whole formation is filled");
+                        JOptionPane.showMessageDialog(w, "The whole hangar is filled");
                     }
                 }
             }
@@ -60,13 +58,13 @@ public class FormFormation {
                         img.update(gf);
                         Plane_bomber plane = new Plane_bomber(100, 1000, mColor, aColor,
                         true, true, rnd.nextInt(6), rnd.nextInt(3));
-                        int num = formation.Add(plane);
+                        int num = hangar.Add(plane);
                         if (num != -1) {
                             img.update(gf);
                             JOptionPane.showMessageDialog(w, "Place " + num + " taken");
                             Draw();
                         } else {
-                            JOptionPane.showMessageDialog(w, "The whole formation is filled");
+                            JOptionPane.showMessageDialog(w, "The whole hangar is filled");
                         }
                     }
                 }
@@ -102,7 +100,7 @@ public class FormFormation {
                         return;
                     }
 
-                    ITransport plane = formation.Remove(place);
+                    ITransport plane = hangar.Remove(place);
                     if (plane != null) {
                         FormPlane form = new FormPlane();
                         form.SetPlane(plane);
@@ -123,13 +121,13 @@ public class FormFormation {
 
         w.setVisible(true);
 
-        formation = new Formation<>(Plane.class, img.getWidth(), img.getHeight());
+        hangar = new Hangar<>(Plane.class, img.getWidth(), img.getHeight());
 
         gf = img.getGraphics();
         Draw();
     }
 
     private void Draw() {
-        formation.Draw(gf);
+        hangar.Draw(gf);
     }
 }
