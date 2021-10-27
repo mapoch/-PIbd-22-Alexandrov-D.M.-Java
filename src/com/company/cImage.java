@@ -14,8 +14,6 @@ public class cImage extends JComponent {
         super.paintComponents(g);
         g2d = (Graphics2D) g;
 
-        //g2d.setColor(Color.WHITE);
-        //g2d.fillRect(0,0, getWidth(), getHeight());
         if (b_img != null) {
             g2d.drawImage(b_img, 0, 0, this);
         }
