@@ -2,24 +2,35 @@ package com.company;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class FormHangar {
     private Hangar<Plane, Additionals_Draw> hangar;
-    JComponent img;
-    Graphics gf;
+    cImage img_box;
+    BufferedImage buffered_img;
+    Graphics gh;
+
+    private void Draw() {
+        gh = buffered_img.createGraphics();
+        gh.setColor(Color.WHITE);
+        gh.fillRect(0,0, img_box.getWidth(), img_box.getHeight());
+        hangar.Draw(gh);
+        img_box.b_img = buffered_img;
+        img_box.repaint();
+    }
 
     public FormHangar() {
-        JFrame w = new JFrame("Formation");
+        JFrame w = new JFrame("Hangar");
         w.setLayout(null);
         w.setSize(1101, 648);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        img = new cImage();
-        img.setSize(900, 601);
-        img.setBackground(Color.WHITE);
-        img.setLocation(0, 0);
-        img.setVisible(true);
+        img_box = new cImage();
+        img_box.setSize(900, 601);
+        img_box.setLocation(0, 0);
+
+        buffered_img = new BufferedImage(img_box.getWidth(), img_box.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         Button buttonSetP = new Button("Add plane");
         buttonSetP.setLocation(906, 12);
@@ -33,7 +44,6 @@ public class FormHangar {
                     Plane plane = new Plane(100, 1000, mColor);
                     int num = hangar.Add(plane);
                     if (num != -1) {
-                        img.update(gf);
                         JOptionPane.showMessageDialog(w, "Place " + num + " taken");
                         Draw();
                     } else {
@@ -55,12 +65,11 @@ public class FormHangar {
                 Random rnd = new Random();
                 if (mColor != null) {
                     if (aColor != null) {
-                        img.update(gf);
+
                         Plane_bomber plane = new Plane_bomber(100, 1000, mColor, aColor,
                         true, true, rnd.nextInt(6), rnd.nextInt(3));
                         int num = hangar.Add(plane);
                         if (num != -1) {
-                            img.update(gf);
                             JOptionPane.showMessageDialog(w, "Place " + num + " taken");
                             Draw();
                         } else {
@@ -105,7 +114,6 @@ public class FormHangar {
                         FormPlane form = new FormPlane();
                         form.SetPlane(plane);
                     }
-                    img.update(gf);
                     Draw();
                 }
             }
@@ -117,17 +125,12 @@ public class FormHangar {
         w.add(labelPlace);
         w.add(textFieldPlace);
         w.add(buttonUnset);
-        w.add(img);
+        w.add(img_box);
 
         w.setVisible(true);
 
-        hangar = new Hangar<>(Plane.class, img.getWidth(), img.getHeight());
+        hangar = new Hangar<>(Plane.class, img_box.getWidth(), img_box.getHeight());
 
-        gf = img.getGraphics();
         Draw();
-    }
-
-    private void Draw() {
-        hangar.Draw(gf);
     }
 }

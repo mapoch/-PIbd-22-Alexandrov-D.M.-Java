@@ -5,19 +5,25 @@ import javax.swing.*;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.util.Random;
+import java.awt.image.*;
 
 public class FormPlane {
 
     ITransport plane;
-    JComponent image;
+    cImage image_box;
+    BufferedImage buff_img;
     Graphics g;
 
     private void Draw() {
+        g = buff_img.createGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0,0, image_box.getWidth(), image_box.getHeight());
         plane.DrawObject(g);
+        image_box.b_img = buff_img;
+        image_box.repaint();
     }
 
     public void SetPlane(ITransport new_plane) {
-        g = image.getGraphics();
         this.plane = new_plane;
         Draw();
     }
@@ -28,11 +34,13 @@ public class FormPlane {
         w.setSize(1101, 648);
         w.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        image = new cImage();
-        image.setSize(900, 601);
-        image.setBackground(Color.WHITE);
-        image.setLocation(0, 0);
-        image.setVisible(true);
+        image_box = new cImage();
+        image_box.setSize(900, 601);
+        image_box.setBackground(Color.WHITE);
+        image_box.setLocation(0, 0);
+        image_box.setVisible(true);
+
+        buff_img = new BufferedImage(image_box.getWidth(), image_box.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         Button buttonCreateP = new Button("Create plane");
         buttonCreateP.setLocation(907, 23);
@@ -41,13 +49,11 @@ public class FormPlane {
 
         buttonCreateP.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                g = image.getGraphics();
-                image.update(g);
                 Random rnd = new Random();
                 plane = new Plane(rnd.nextInt(200) + 100,
                         rnd.nextInt(1000) + 1000, Color.GREEN);
                 plane.SetPosition(rnd.nextInt(90) + 10, rnd.nextInt(90) + 10,
-                        image.getWidth(), image.getHeight());
+                        image_box.getWidth(), image_box.getHeight());
 
                 Draw();
             }
@@ -60,14 +66,12 @@ public class FormPlane {
 
         buttonCreateB.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                g = image.getGraphics();
-                image.update(g);
                 Random rnd = new Random();
                 plane = new Plane_bomber(rnd.nextInt(200) + 100, rnd.nextInt(1000) + 1000,
                         Color.GREEN, Color.RED, true, true,
                         rnd.nextInt(6), rnd.nextInt(3));
                 plane.SetPosition(rnd.nextInt(90) + 10, rnd.nextInt(90) + 10,
-                        image.getWidth(), image.getHeight());
+                        image_box.getWidth(), image_box.getHeight());
 
                 Draw();
             }
@@ -82,7 +86,6 @@ public class FormPlane {
                 .getImage().getScaledInstance(85, 41, Image.SCALE_AREA_AVERAGING)));
         buttonMoveUp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                image.update(g);
                 plane.MoveObject(Direction.Up);
                 Draw();
             }
@@ -97,7 +100,6 @@ public class FormPlane {
                 getImage().getScaledInstance(85, 41, Image.SCALE_AREA_AVERAGING)));
         buttonMoveDown.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                image.update(g);
                 plane.MoveObject(Direction.Down);
                 Draw();
             }
@@ -112,7 +114,6 @@ public class FormPlane {
                 getImage().getScaledInstance(41, 77, Image.SCALE_AREA_AVERAGING)));
         buttonMoveRight.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                image.update(g);
                 plane.MoveObject(Direction.Right);
                 Draw();
             }
@@ -127,7 +128,6 @@ public class FormPlane {
                 getImage().getScaledInstance(41, 77, Image.SCALE_AREA_AVERAGING)));
         buttonMoveLeft.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                image.update(g);
                 plane.MoveObject(Direction.Left);
                 Draw();
             }
@@ -139,7 +139,7 @@ public class FormPlane {
         w.add(buttonMoveDown);
         w.add(buttonMoveRight);
         w.add(buttonMoveLeft);
-        w.add(image);
+        w.add(image_box);
 
         w.setVisible(true);
     }
