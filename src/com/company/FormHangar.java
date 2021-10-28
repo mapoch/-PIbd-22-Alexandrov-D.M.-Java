@@ -129,7 +129,7 @@ public class FormHangar {
 
         w.setVisible(true);
 
-        hangar = new Hangar<>(Plane.class, img_box.getWidth(), img_box.getHeight());
+        hangar = new Hangar<>(img_box.getWidth(), img_box.getHeight());
 
         Draw();
     }

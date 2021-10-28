@@ -1,9 +1,10 @@
 package com.company;
 import java.awt.*;
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
-    private final TP[] _places;
+    private final ArrayList<TP> _places;
+    private int max_count;
 
     private int pictureWidth;
     private int pictureHeight;
@@ -14,12 +15,13 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
     private int width;
     private int height;
 
-    public Hangar(Class<TP> klass, int picWidth, int picHeight) {
+    public Hangar(int picWidth, int picHeight) {
         width = picWidth / _placeSizeWidth;
         height = picHeight / _placeSizeHeight;
-        _places = (TP[])Array.newInstance(klass, width * height);
+        max_count = width * height;
         pictureWidth = picWidth;
         pictureHeight = picHeight;
+        _places = new ArrayList<TP>();
     }
 
     public int Add(TP plane) {
@@ -31,11 +33,17 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
             j = 0;
             while (j < width)
             {
-                if (_places[i*width + j] == null)
+                if (i * width + j == _places.size() && _places.size() <= max_count)
                 {
-                    plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight,
-                            pictureWidth, pictureHeight);
-                    _places[i * width + j] = plane;
+                    plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight, pictureWidth, pictureHeight);
+                    _places.add(plane);
+                    return (i * width + j);
+                }
+                else
+                if (i * width + j < _places.size() && _places.get(i * width + j) == null)
+                {
+                    plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight, pictureWidth, pictureHeight);
+                    _places.set(i * width + j, plane);
                     return (i * width + j);
                 }
                 j++;
@@ -46,11 +54,11 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
     }
 
     public TP Remove(int index) {
-        if (index >= _places.length || index < 0) return null;
-        if (_places[index] != null)
+        if (index >= _places.size() || index < 0) return null;
+        if (_places.get(index) != null)
         {
-            TP ret_T = _places[index];
-            _places[index] = null;
+            TP ret_T = _places.get(index);
+            _places.set(index, null);
             return ret_T;
         }
         else return null;
@@ -70,10 +78,10 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
     {
         Graphics2D g2d = (Graphics2D) g;
         DrawMarking(g2d);
-        for (int i = 0; i < _places.length; i++)
+        for (int i = 0; i < _places.size(); i++)
         {
-            if (_places[i] != null) {
-                _places[i].DrawObject(g);
+            if (_places.get(i) != null) {
+                _places.get(i).DrawObject(g);
             }
         }
     }
