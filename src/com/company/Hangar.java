@@ -100,4 +100,9 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
                     (pictureHeight / _placeSizeHeight) * _placeSizeHeight);
         }
     }
+
+    public TP getPlane(int ind) {
+        if (ind > -1 && ind < _places.size()) return _places.get(ind);
+        else return null;
+    }
 }
