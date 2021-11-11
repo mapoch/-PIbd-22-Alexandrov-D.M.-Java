@@ -23,7 +23,6 @@ public class Outer_bombs implements Additionals_Draw{
     }
 
     public void Draw(Graphics2D g, Color color, int X, int Y) {
-
         g.setColor(color);
 
         Polygon bomb_plumage;
