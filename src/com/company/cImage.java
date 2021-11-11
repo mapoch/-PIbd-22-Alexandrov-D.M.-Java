@@ -1,6 +1,6 @@
 package com.company;
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
 public class cImage extends JComponent {
     public Graphics2D g2d;
