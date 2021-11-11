@@ -35,7 +35,8 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
                     return (i * (pictureWidth / _placeSizeWidth) + j);
                 }
                 else
-                if (i * (pictureWidth / _placeSizeWidth) + j < _places.size() && _places.get(i * width + j) == null)
+                if (i * (pictureWidth / _placeSizeWidth) + j < _places.size() &&
+                        _places.get(i * (pictureWidth / _placeSizeWidth) + j) == null)
                 {
                     plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight, pictureWidth, pictureHeight);
                     _places.set(i * (pictureWidth / _placeSizeWidth) + j, plane);
