@@ -12,15 +12,10 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
     private int _placeSizeWidth = 210;
     private int _placeSizeHeight = 80;
 
-    private int width;
-    private int height;
-
     public Hangar(int picWidth, int picHeight) {
-        width = picWidth / _placeSizeWidth;
-        height = picHeight / _placeSizeHeight;
-        max_count = width * height;
         pictureWidth = picWidth;
         pictureHeight = picHeight;
+        max_count = (pictureWidth / _placeSizeWidth) * (pictureHeight / _placeSizeHeight);
         _places = new ArrayList<TP>();
     }
 
@@ -28,23 +23,23 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
         int i = 0;
         int j = 0;
 
-        while (i < height)
+        while (i < (pictureHeight / _placeSizeHeight))
         {
             j = 0;
-            while (j < width)
+            while (j < (pictureWidth / _placeSizeWidth))
             {
-                if (i * width + j == _places.size() && _places.size() <= max_count)
+                if (i * (pictureWidth / _placeSizeWidth) + j == _places.size() && _places.size() <= max_count)
                 {
                     plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight, pictureWidth, pictureHeight);
                     _places.add(plane);
-                    return (i * width + j);
+                    return (i * (pictureWidth / _placeSizeWidth) + j);
                 }
                 else
-                if (i * width + j < _places.size() && _places.get(i * width + j) == null)
+                if (i * (pictureWidth / _placeSizeWidth) + j < _places.size() && _places.get(i * width + j) == null)
                 {
                     plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight, pictureWidth, pictureHeight);
-                    _places.set(i * width + j, plane);
-                    return (i * width + j);
+                    _places.set(i * (pictureWidth / _placeSizeWidth) + j, plane);
+                    return (i * (pictureWidth / _placeSizeWidth) + j);
                 }
                 j++;
             }
@@ -64,14 +59,24 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
         else return null;
     }
 
-    public boolean equal(int places) {
-        if (width*height == places) return true;
-        else return false;
+    public boolean equal(int count) {
+        int k = 0;
+        for (int i = 0; i < _places.size(); i++) {
+            if (_places.get(i) != null) {
+                k++;
+            }
+        }
+        return (count == k);
     }
 
-    public boolean non_equal(int places) {
-        if (width*height != places) return true;
-        else return false;
+    public boolean unEqual(int count) {
+        int k = 0;
+        for (int i = 0; i < _places.size(); i++) {
+            if (_places.get(i) != null) {
+                k++;
+            }
+        }
+        return (count != k);
     }
 
     public void Draw(Graphics g)
