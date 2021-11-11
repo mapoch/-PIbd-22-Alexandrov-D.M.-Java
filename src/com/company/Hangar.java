@@ -1,9 +1,10 @@
 package com.company;
 import java.awt.*;
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
-    private final TP[] _places;
+    private final ArrayList<TP> _places;
+    private int max_count;
 
     private int pictureWidth;
     private int pictureHeight;
@@ -11,12 +12,11 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
     private int _placeSizeWidth = 210;
     private int _placeSizeHeight = 80;
 
-
-    public Hangar(Class<TP> klass, int picWidth, int picHeight) {
+    public Hangar(int picWidth, int picHeight) {
         pictureWidth = picWidth;
         pictureHeight = picHeight;
-        _places = (TP[])Array.newInstance(klass,
-                (pictureWidth / _placeSizeWidth) * (pictureHeight / _placeSizeHeight));
+        max_count = (pictureWidth / _placeSizeWidth) * (pictureHeight / _placeSizeHeight);
+        _places = new ArrayList<TP>();
     }
 
     public int Add(TP plane) {
@@ -26,13 +26,20 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
         while (i < (pictureHeight / _placeSizeHeight))
         {
             j = 0;
-            while (j < pictureWidth / _placeSizeWidth)
+            while (j < (pictureWidth / _placeSizeWidth))
             {
-                if (_places[i*(pictureWidth / _placeSizeWidth) + j] == null)
+                if (i * (pictureWidth / _placeSizeWidth) + j == _places.size() && _places.size() <= max_count)
                 {
-                    plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight,
-                            pictureWidth, pictureHeight);
-                    _places[i * (pictureWidth / _placeSizeWidth) + j] = plane;
+                    plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight, pictureWidth, pictureHeight);
+                    _places.add(plane);
+                    return (i * (pictureWidth / _placeSizeWidth) + j);
+                }
+                else
+                if (i * (pictureWidth / _placeSizeWidth) + j < _places.size() &&
+                        _places.get(i * (pictureWidth / _placeSizeWidth) + j) == null)
+                {
+                    plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight, pictureWidth, pictureHeight);
+                    _places.set(i * (pictureWidth / _placeSizeWidth) + j, plane);
                     return (i * (pictureWidth / _placeSizeWidth) + j);
                 }
                 j++;
@@ -43,11 +50,11 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
     }
 
     public TP Remove(int index) {
-        if (index >= _places.length || index < 0) return null;
-        if (_places[index] != null)
+        if (index >= _places.size() || index < 0) return null;
+        if (_places.get(index) != null)
         {
-            TP ret_T = _places[index];
-            _places[index] = null;
+            TP ret_T = _places.get(index);
+            _places.set(index, null);
             return ret_T;
         }
         else return null;
@@ -55,8 +62,8 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
 
     public boolean equal(int count) {
         int k = 0;
-        for (int i = 0; i < _places.length; i++) {
-            if (_places[i] != null) {
+        for (int i = 0; i < _places.size(); i++) {
+            if (_places.get(i) != null) {
                 k++;
             }
         }
@@ -65,8 +72,8 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
 
     public boolean unEqual(int count) {
         int k = 0;
-        for (int i = 0; i < _places.length; i++) {
-            if (_places[i] != null) {
+        for (int i = 0; i < _places.size(); i++) {
+            if (_places.get(i) != null) {
                 k++;
             }
         }
@@ -77,10 +84,10 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
     {
         Graphics2D g2d = (Graphics2D) g;
         DrawMarking(g2d);
-        for (int i = 0; i < _places.length; i++)
+        for (int i = 0; i < _places.size(); i++)
         {
-            if (_places[i] != null) {
-                _places[i].DrawObject(g);
+            if (_places.get(i) != null) {
+                _places.get(i).DrawObject(g);
             }
         }
     }
@@ -98,5 +105,10 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
             g.drawLine(i * _placeSizeWidth, 0, i * _placeSizeWidth,
                     (pictureHeight / _placeSizeHeight) * _placeSizeHeight);
         }
+    }
+
+    public TP getPlane(int ind) {
+        if (ind > -1 && ind < _places.size()) return _places.get(ind);
+        else return null;
     }
 }
