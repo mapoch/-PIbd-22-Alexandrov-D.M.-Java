@@ -11,32 +11,29 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
     private int _placeSizeWidth = 210;
     private int _placeSizeHeight = 80;
 
-    private int width;
-    private int height;
 
     public Hangar(Class<TP> klass, int picWidth, int picHeight) {
-        width = picWidth / _placeSizeWidth;
-        height = picHeight / _placeSizeHeight;
-        _places = (TP[])Array.newInstance(klass, width * height);
         pictureWidth = picWidth;
         pictureHeight = picHeight;
+        _places = (TP[])Array.newInstance(klass,
+                (pictureWidth / _placeSizeWidth) * (pictureHeight / _placeSizeHeight));
     }
 
     public int Add(TP plane) {
         int i = 0;
         int j = 0;
 
-        while (i < height)
+        while (i < (pictureHeight / _placeSizeHeight))
         {
             j = 0;
-            while (j < width)
+            while (j < pictureWidth / _placeSizeWidth)
             {
-                if (_places[i*width + j] == null)
+                if (_places[i*(pictureWidth / _placeSizeWidth) + j] == null)
                 {
                     plane.SetPosition(5 + j * _placeSizeWidth, 5 + i * _placeSizeHeight,
                             pictureWidth, pictureHeight);
-                    _places[i * width + j] = plane;
-                    return (i * width + j);
+                    _places[i * (pictureWidth / _placeSizeWidth) + j] = plane;
+                    return (i * (pictureWidth / _placeSizeWidth) + j);
                 }
                 j++;
             }
@@ -56,14 +53,24 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
         else return null;
     }
 
-    public boolean equal(int places) {
-        if (width*height == places) return true;
-        else return false;
+    public boolean equal(int count) {
+        int k = 0;
+        for (int i = 0; i < _places.length; i++) {
+            if (_places[i] != null) {
+                k++;
+            }
+        }
+        return (count == k);
     }
 
-    public boolean non_equal(int places) {
-        if (width*height != places) return true;
-        else return false;
+    public boolean unEqual(int count) {
+        int k = 0;
+        for (int i = 0; i < _places.length; i++) {
+            if (_places[i] != null) {
+                k++;
+            }
+        }
+        return (count != k);
     }
 
     public void Draw(Graphics g)
