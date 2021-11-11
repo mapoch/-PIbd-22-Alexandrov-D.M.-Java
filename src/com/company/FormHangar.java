@@ -231,6 +231,8 @@ public class FormHangar {
                         return;
                     }
 
+                    if (ind < 0 || ind > deleted.size()) return;
+
                     if (deleted.get(ind) != null) {
                         FormPlane form = new FormPlane();
                         form.SetPlane(deleted.get(ind));
