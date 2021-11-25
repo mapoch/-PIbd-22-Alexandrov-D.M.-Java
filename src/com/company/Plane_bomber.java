@@ -93,6 +93,8 @@ public class Plane_bomber extends Plane{
 
         Graphics2D g = (Graphics2D)gg;
 
+        g.setColor(getAddColor());
+
         if (Back_state) {
             g.drawOval(_startX + 90, _startY + 30, 10, 10);
             g.drawLine(_startX + 100, _startY + 35,_startX + 105, _startY + 35);
@@ -101,5 +103,15 @@ public class Plane_bomber extends Plane{
         if (Bombs_state) {
             addDraw.Draw(g, AddColor, _startX, _startY);
         }
+    }
+
+    public void SetAddColor(Color color) {
+        AddColor = color;
+    }
+    public void SetCabin(boolean state) { Back_state = state; System.out.println(Back_state);}
+    public void SetBombs(boolean state) { Bombs_state = state; }
+    public void SetAmm(int i) { addDraw.setAmount(i); }
+    public void SetAdd(Additionals_Draw add) {
+        addDraw = add;
     }
 }
