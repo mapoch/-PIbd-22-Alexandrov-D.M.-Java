@@ -7,4 +7,6 @@ public interface ITransport {
     void MoveObject(Direction direction);
 
     void DrawObject(Graphics g);
+
+    void SetMainColor(Color color);
 }

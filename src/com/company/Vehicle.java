@@ -33,4 +33,11 @@ public abstract class Vehicle implements ITransport{
     }
     public abstract void DrawObject(Graphics g);
     public abstract void MoveObject(Direction direction);
+
+    public void SetMainColor(Color color) {
+        MainColor = color;
+    }
+
+    public void SetLoad(int i) { Load_Weight = i; }
+    public void SetSpeed(int i) { Max_Speed = i; }
 }

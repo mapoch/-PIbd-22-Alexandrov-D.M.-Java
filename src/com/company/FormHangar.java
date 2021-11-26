@@ -11,6 +11,7 @@ import java.util.Random;
 public class FormHangar {
     private HangarsCollection hangarsCollection;
     private LinkedList<Vehicle> deleted;
+    JFrame w;
     cImage img_box;
     BufferedImage buffered_img;
     Graphics gh;
@@ -51,8 +52,23 @@ public class FormHangar {
         }
     }
 
+    WindowAdapter AddPlane = new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {
+            Plane plane = (Plane) ((FormPlaneConfig) e.getSource()).GetPlane();
+            if (plane != null && list_box.getSelectedIndex() > -1) {
+                int num = hangarsCollection.getValue((String) list_box.getSelectedValue()).Add(plane);
+                if (num != -1) {
+                    JOptionPane.showMessageDialog(w, "Place " + num + " taken");
+                    Draw();
+                } else {
+                    JOptionPane.showMessageDialog(w, "Hangar filled");
+                }
+            }
+        }
+    };
+
     public FormHangar() {
-        JFrame w = new JFrame("Hangar");
+        w = new JFrame("Hangar");
         w.setLayout(null);
         w.setSize(1101, 648);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -118,54 +134,17 @@ public class FormHangar {
             }
         });
 
-        Button buttonSetP = new Button("Add plane");
-        buttonSetP.setLocation(906, 230);
-        buttonSetP.setSize(165, 45);
-        buttonSetP.setVisible(true);
+        Button buttonSetPlane = new Button("Add plane");
+        buttonSetPlane.setLocation(906, 280);
+        buttonSetPlane.setSize(165, 45);
+        buttonSetPlane.setVisible(true);
 
-        buttonSetP.addActionListener(new ActionListener() {
+        buttonSetPlane.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (list_box.getSelectedIndex() > -1) {
-                    Color mColor = JColorChooser.showDialog(w, "Selection", Color.green);
-                    if (mColor != null) {
-                        Plane plane = new Plane(100, 1000, mColor);
-                        int num = hangarsCollection.getValue(list_box.getSelectedValue().toString()).Add(plane);
-                        if (num != -1) {
-                            JOptionPane.showMessageDialog(w, "Place " + num + " taken");
-                            Draw();
-                        } else {
-                            JOptionPane.showMessageDialog(w, "The whole hangar is filled");
-                        }
-                    }
-                }
-            }
-        });
+                    FormPlaneConfig planeConfForm = new FormPlaneConfig();
 
-        Button buttonSetB = new Button("Add bomber plane");
-        buttonSetB.setLocation(906, 280);
-        buttonSetB.setSize(165, 45);
-        buttonSetB.setVisible(true);
-
-        buttonSetB.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (list_box.getSelectedIndex() > -1) {
-                    Color mColor = JColorChooser.showDialog(w, "Selection", Color.green);
-                    Color aColor = JColorChooser.showDialog(w, "Selection", Color.red);
-                    Random rnd = new Random();
-                    if (mColor != null) {
-                        if (aColor != null) {
-
-                            Plane_bomber plane = new Plane_bomber(100, 1000, mColor, aColor,
-                                    true, true, rnd.nextInt(6), rnd.nextInt(3));
-                            int num = hangarsCollection.getValue(list_box.getSelectedValue().toString()).Add(plane);
-                            if (num != -1) {
-                                JOptionPane.showMessageDialog(w, "Place " + num + " taken");
-                                Draw();
-                            } else {
-                                JOptionPane.showMessageDialog(w, "The whole hangar is filled");
-                            }
-                        }
-                    }
+                    planeConfForm.AddEvent(AddPlane);
                 }
             }
         });
@@ -248,8 +227,7 @@ public class FormHangar {
         w.add(buttonAddHangar);
         w.add(buttonDeleteHangar);
         w.add(list_box);
-        w.add(buttonSetP);
-        w.add(buttonSetB);
+        w.add(buttonSetPlane);
         w.add(labelUnset);
         w.add(labelPlace);
         w.add(textFieldPlace);
