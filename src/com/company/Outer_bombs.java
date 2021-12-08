@@ -77,4 +77,21 @@ public class Outer_bombs implements Additionals_Draw{
                 break;
         }
     }
+
+    @Override
+    public String toString() {
+        int amount = 2;
+        switch (Amount) {
+            case Two:
+                amount = 2;
+                break;
+            case Four:
+                amount = 4;
+                break;
+            case Six:
+                amount = 6;
+                break;
+        }
+        return 1 + ";" + amount;
+    }
 }

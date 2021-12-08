@@ -1,5 +1,6 @@
 package com.company;
 import java.awt.*;
+import java.lang.reflect.Field;
 
 public class Plane_bomber extends Plane{
     private Additionals_Draw addDraw;
@@ -39,6 +40,31 @@ public class Plane_bomber extends Plane{
         AddColor = addColor;
         Bombs_state = bombs_state;
         Back_state = back_state;
+    }
+
+    public Plane_bomber(String info) {
+        super(info);
+        String[] strs = info.split(separator);
+        if (strs.length == 8) {
+            Max_Speed = Integer.parseInt(strs[0]);
+            Load_Weight = Integer.parseInt(strs[1]);
+            MainColor = Color.decode(strs[2]);
+            AddColor = Color.decode(strs[3]);
+            Back_state = Boolean.parseBoolean(strs[4]);
+            Bombs_state = Boolean.parseBoolean(strs[5]);
+            switch (Integer.parseInt(strs[6])) {
+                case 0:
+                    addDraw = new Inner_bombs();
+                    break;
+                case 1:
+                    addDraw = new Outer_bombs();
+                    break;
+                case 2:
+                    addDraw = new Outer_rockets();
+                    break;
+            }
+            addDraw.setAmount(Integer.parseInt(strs[7]));
+        }
     }
 
     public void SetPosition(int x, int y, int width, int height)
@@ -113,5 +139,11 @@ public class Plane_bomber extends Plane{
     public void SetAmm(int i) { addDraw.setAmount(i); }
     public void SetAdd(Additionals_Draw add) {
         addDraw = add;
+    }
+
+    @Override
+    public String toString() {
+        return "" + Max_Speed + separator + Load_Weight + separator + MainColor.getRGB() + separator + AddColor.getRGB() +
+                separator + Back_state + separator + Bombs_state + separator + addDraw.toString();
     }
 }
