@@ -94,6 +94,8 @@ public class HangarsCollection {
     }
 
     public boolean SaveSingleHangarFile(String filename, String key) {
+        if (!hangarStages.containsKey(key)) return false;
+
         FileOutputStream fs = null;
         try {
             fs = new FileOutputStream(filename);
@@ -180,8 +182,8 @@ public class HangarsCollection {
         String line = sr.readLine();
         if (line.contains("Hangar")) {
             key = line.split(separator)[1];
-            if (hangarStages.containsKey(key)) hangarStages.remove(key);
-            AddHangar(key);
+            if (hangarStages.containsKey(key)) hangarStages.get(key).Clear();
+            else AddHangar(key);
         }
         else return false;
 
