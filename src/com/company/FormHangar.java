@@ -73,6 +73,66 @@ public class FormHangar {
         w.setSize(1101, 648);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        JMenuItem saveB = new JMenuItem("Save all to file");
+
+        saveB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (list_box.isSelectionEmpty()) {
+                    return;
+                }
+                else {
+                    FileDialog fd = new FileDialog(w, "Choose a file", FileDialog.LOAD);
+                    fd.setVisible(true);
+                    String filename = fd.getDirectory() + fd.getFile();
+                    if (filename.contains(".txt")) {
+                        if (hangarsCollection.SaveFile(filename)) ReloadLevels();
+                    }
+                }
+            }
+        });
+
+        JMenuItem saveSHB = new JMenuItem("Save single hangar to file");
+
+        saveSHB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (list_box.isSelectionEmpty()) {
+                    return;
+                }
+                else {
+                    FileDialog fd = new FileDialog(w, "Choose a file", FileDialog.LOAD);
+                    fd.setVisible(true);
+                    String filename = fd.getDirectory() + fd.getFile();
+                    if (filename.contains(".txt")) {
+                        if (hangarsCollection.SaveSingleHangarFile(filename, list_box.getSelectedValue().toString())) ReloadLevels();
+                    }
+                }
+            }
+        });
+
+        JMenuItem loadB = new JMenuItem("Load from file");
+
+        loadB.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                FileDialog fd = new FileDialog(w, "Choose a file", FileDialog.LOAD);
+                fd.setVisible(true);
+                String filename = fd.getDirectory() + fd.getFile();
+                if (filename.contains(".txt")) {
+                    if (!hangarsCollection.LoadData(filename)) return;
+                }
+                ReloadLevels();
+            }
+        });
+
+        JMenu fileMenu = new JMenu("File");
+        fileMenu.add(saveB);
+        fileMenu.add(saveSHB);
+        fileMenu.add(loadB);
+
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(fileMenu);
+
+        w.setJMenuBar(menuBar);
+
         img_box = new cImage();
         img_box.setSize(900, 601);
         img_box.setLocation(0, 0);
@@ -125,9 +185,9 @@ public class FormHangar {
             public void actionPerformed(ActionEvent e) {
                 if (list_box.getSelectedIndex() > -1) {
                     if (JOptionPane.showConfirmDialog(w,
-                            "Are you want to delete hangar" + list_box.getSelectedValue().toString() + "?",
+                            "Are you want to delete hangar " + list_box.getSelectedValue().toString() + "?",
                             "Confirm", JOptionPane.YES_NO_OPTION) == 0) {
-                        hangarsCollection.DelHangar(textFieldHangar.getText());
+                        hangarsCollection.DelHangar((String)list_box.getSelectedValue());
                         ReloadLevels();
                     }
                 }

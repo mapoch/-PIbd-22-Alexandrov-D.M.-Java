@@ -1,9 +1,12 @@
 package com.company;
 import java.awt.*;
+import java.lang.reflect.Field;
 
 public class Plane extends Vehicle{
     protected int planeWidth = 95;
     protected int planeHeight = 70;
+
+    protected String separator = ";";
 
     public Plane(int maxSpeed, int load_Weight, Color mainColor)
     {
@@ -19,6 +22,15 @@ public class Plane extends Vehicle{
         MainColor = mainColor;
         this.planeWidth = plane_Width;
         this.planeHeight = plane_Height;
+    }
+
+    protected Plane(String info) {
+        String[] strs = info.split(separator);
+        if (strs.length == 3) {
+            Max_Speed = Integer.parseInt(strs[0]);
+            Load_Weight = Integer.parseInt(strs[1]);
+            MainColor = Color.decode(strs[2]);
+        }
     }
 
     @Override
@@ -93,5 +105,10 @@ public class Plane extends Vehicle{
         body.addPoint(_startX + 95, _startY + 40);
         body.addPoint(_startX + 95, _startY + 30);
         g.drawPolygon(body);
+    }
+
+    @Override
+    public String toString() {
+        return "" + Max_Speed + separator + Load_Weight + separator + MainColor.getRGB();
     }
 }
