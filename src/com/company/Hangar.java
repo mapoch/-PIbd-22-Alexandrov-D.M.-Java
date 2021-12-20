@@ -113,4 +113,8 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
         if (ind > -1 && ind < _places.size()) return _places.get(ind);
         else return null;
     }
+
+    public void Clear() {
+        _places.clear();
+    }
 }
