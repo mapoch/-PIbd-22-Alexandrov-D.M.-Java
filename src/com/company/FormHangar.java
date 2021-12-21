@@ -91,8 +91,6 @@ public class FormHangar {
         }
         catch (Exception ex) {}
 
-        logger.fatal("f");
-
         JMenuItem saveB = new JMenuItem("Save all to file");
 
         saveB.addActionListener(new ActionListener() {
