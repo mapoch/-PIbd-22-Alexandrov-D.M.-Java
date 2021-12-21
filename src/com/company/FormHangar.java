@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.FileInputStream;
 import java.util.LinkedList;
 
 import org.apache.log4j.*;
@@ -146,6 +147,9 @@ public class FormHangar {
                         }
                         catch (IOException ex) {
                             logger.error("io error in SavingSingle");
+                        }
+                        catch (IllegalArgumentException ex) {
+                            logger.error("illegal argument in SavingSingle");
                         }
                         catch (Exception ex) {
                             logger.fatal("Unknown fatal error in SavingSingle");

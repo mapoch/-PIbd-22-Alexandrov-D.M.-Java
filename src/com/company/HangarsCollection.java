@@ -91,7 +91,10 @@ public class HangarsCollection {
         }
     }
 
-    public void SaveSingleHangarFile(String filename, String key) throws FileNotFoundException, IOException{
+    public void SaveSingleHangarFile(String filename, String key)
+            throws FileNotFoundException, IOException, IllegalArgumentException{
+        if (!hangarStages.containsKey(key)) throw new IllegalArgumentException();
+
         FileOutputStream fs = null;
         try {
             fs = new FileOutputStream(filename);
@@ -178,8 +181,8 @@ public class HangarsCollection {
         String line = sr.readLine();
         if (line.contains("Hangar")) {
             key = line.split(separator)[1];
-            if (hangarStages.containsKey(key)) hangarStages.remove(key);
-            AddHangar(key);
+            if (hangarStages.containsKey(key)) hangarStages.get(key).Clear();
+            else AddHangar(key);
         }
         else throw new IllegalArgumentException("AddSingle function");
 
