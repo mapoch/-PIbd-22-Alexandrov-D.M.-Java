@@ -128,16 +128,4 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> implemen
     public Iterator<TP> iterator() {
         return _places.iterator();
     }
-
-    public void Print() {
-        LinkedList<Plane> planes = new LinkedList<Plane>();
-        planes.add(new Plane(1, 1, Color.GREEN, 10, 15));
-        planes.add(new Plane(1, 1, Color.GREEN, 10, 15));
-        planes.add(new Plane(1, 1, Color.GREEN, 10, 15));
-        planes.add(new Plane(1, 1, Color.GREEN, 10, 15));
-        planes.add(new Plane(1, 1, Color.GREEN, 10, 15));
-        for (Plane plane: planes) {
-                System.out.println(plane);
-        }
-    }
 }

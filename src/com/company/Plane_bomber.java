@@ -1,8 +1,10 @@
 package com.company;
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public class Plane_bomber extends Plane implements Comparable<Plane>{
+public class Plane_bomber extends Plane implements Comparable<Plane> {
     private Additionals_Draw addDraw;
 
     private Color AddColor;
@@ -164,11 +166,11 @@ public class Plane_bomber extends Plane implements Comparable<Plane>{
         {
             return false;
         }
-        if (MainColor != other.MainColor)
+        if (!MainColor.equals(other.MainColor))
         {
             return false;
         }
-        if (AddColor != other.AddColor)
+        if (!AddColor.equals(other.AddColor))
         {
             return false;
         }
@@ -177,6 +179,10 @@ public class Plane_bomber extends Plane implements Comparable<Plane>{
             return false;
         }
         if (Bombs_state != other.Bombs_state)
+        {
+            return false;
+        }
+        if (!addDraw.getClass().equals(other.addDraw.getClass()))
         {
             return false;
         }

@@ -1,6 +1,6 @@
 package com.company;
 import java.awt.*;
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Plane extends Vehicle implements Comparable<Plane> {
@@ -117,7 +117,7 @@ public class Plane extends Vehicle implements Comparable<Plane> {
         if (Load_Weight != other.Load_Weight) {
             return false;
         }
-        if (MainColor != other.MainColor) {
+        if (!MainColor.equals(other.MainColor)) {
             return false;
         }
         return true;
@@ -149,26 +149,4 @@ public class Plane extends Vehicle implements Comparable<Plane> {
         }
         return 0;
     }
-
-
-/*
-, Iterable<Plane>
-    public Iterator<Plane> iterator() {
-        return new Iterator<Plane>() {
-            const values = Object.values(this);
-            int index = -1;
-
-            @Override
-            public boolean hasNext() {
-                return false;
-            }
-
-            @Override
-            public Plane next() {
-                index++;
-                return null;
-            }
-        }
-    }
- */
 }
