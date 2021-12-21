@@ -3,11 +3,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Plane extends Vehicle implements Comparable<Plane> {
+public class Plane extends Vehicle implements Comparable<Plane>, Iterable<String> {
     protected int planeWidth = 95;
     protected int planeHeight = 70;
 
     protected String separator = ";";
+
+    ArrayList<String> props = new ArrayList<String>();
 
     public Plane(int maxSpeed, int load_Weight, Color mainColor) {
         Max_Speed = maxSpeed;
@@ -148,5 +150,18 @@ public class Plane extends Vehicle implements Comparable<Plane> {
             return Integer.compare(MainColor.getRGB(), other.MainColor.getRGB());
         }
         return 0;
+    }
+
+    private void GetProps() {
+        props.clear();
+        props.add(this.getClass().toString());
+        props.add(this.getMax_Speed() + "");
+        props.add(this.getLoad_Weight() + "");
+        props.add(this.getMainColor().getRGB() + "");
+    }
+
+    public Iterator<String> iterator() {
+        GetProps();
+        return props.iterator();
     }
 }

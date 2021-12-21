@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Plane_bomber extends Plane implements Comparable<Plane> {
+public class Plane_bomber extends Plane implements Comparable<Plane>, Iterable<String> {
     private Additionals_Draw addDraw;
 
     private Color AddColor;
@@ -206,9 +206,9 @@ public class Plane_bomber extends Plane implements Comparable<Plane> {
     }
 
     public int getAddDrawState() {
-        if (!Bombs_state) return 0;
-        if (addDraw instanceof Inner_bombs) return 1;
-        if (addDraw instanceof Outer_bombs) return 2;
+        if (!Bombs_state) return -1;
+        if (addDraw instanceof Inner_bombs) return 0;
+        if (addDraw instanceof Outer_bombs) return 1;
         if (addDraw instanceof Outer_rockets) return 3;
         return 0;
     }
@@ -245,5 +245,22 @@ public class Plane_bomber extends Plane implements Comparable<Plane> {
             return Integer.compare(getAddDrawState(), other.getAddDrawState());
         }
         return 0;
+    }
+
+    private void GetProps() {
+        props.clear();
+        props.add(this.getClass().toString());
+        props.add(this.getMax_Speed() + "");
+        props.add(this.getLoad_Weight() + "");
+        props.add(this.getMainColor().getRGB() + "");
+        props.add(this.getAddColor().getRGB() + "");
+        props.add(this.getBack_state() + "");
+        props.add(this.getBombs_state() + "");
+        props.add(this.getAddDrawState() + "");
+    }
+
+    public Iterator<String> iterator() {
+        GetProps();
+        return props.iterator();
     }
 }
