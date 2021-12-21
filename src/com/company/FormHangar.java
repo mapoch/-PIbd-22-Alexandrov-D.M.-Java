@@ -5,8 +5,14 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.FileInputStream;
 import java.util.LinkedList;
-import java.util.Random;
+
+import org.apache.log4j.*;
+import javax.mail.*;
 
 public class FormHangar {
     private HangarsCollection hangarsCollection;
@@ -16,6 +22,8 @@ public class FormHangar {
     BufferedImage buffered_img;
     Graphics gh;
     JList list_box;
+
+    private Logger logger = Logger.getLogger(FormHangar.class);
 
     void ReloadLevels() {
         int index = list_box.getSelectedIndex();
@@ -56,12 +64,17 @@ public class FormHangar {
         public void windowClosing(WindowEvent e) {
             Plane plane = (Plane) ((FormPlaneConfig) e.getSource()).GetPlane();
             if (plane != null && list_box.getSelectedIndex() > -1) {
-                int num = hangarsCollection.getValue((String) list_box.getSelectedValue()).Add(plane);
-                if (num != -1) {
+                int num = 0;
+                try {
+                    num = hangarsCollection.getValue((String) list_box.getSelectedValue()).Add(plane);
                     JOptionPane.showMessageDialog(w, "Place " + num + " taken");
                     Draw();
-                } else {
-                    JOptionPane.showMessageDialog(w, "Hangar filled");
+                    logger.info("info: added plane " + plane);
+                } catch (HangarOverflowException ex) {
+                    logger.warn("hangar overflow in plane Adding");
+                    JOptionPane.showMessageDialog(w, "Warning: Hangar filled");
+                } catch (Exception ex) {
+                    logger.fatal("Unknown fatal error in plane Adding");
                 }
             }
         }
@@ -72,6 +85,11 @@ public class FormHangar {
         w.setLayout(null);
         w.setSize(1101, 648);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        try {
+            PropertyConfigurator.configure(new FileInputStream("src/com/company/resources/log4j.properties"));
+        }
+        catch (Exception ex) {}
 
         JMenuItem saveB = new JMenuItem("Save all to file");
 
@@ -85,7 +103,20 @@ public class FormHangar {
                     fd.setVisible(true);
                     String filename = fd.getDirectory() + fd.getFile();
                     if (filename.contains(".txt")) {
-                        if (hangarsCollection.SaveFile(filename)) ReloadLevels();
+                        try {
+                            hangarsCollection.SaveFile(filename);
+                            ReloadLevels();
+                            logger.info("all saved");
+                        }
+                        catch (FileNotFoundException ex) {
+                            logger.error("file not fount in SavingAll");
+                        }
+                        catch (IOException ex) {
+                            logger.error("io error in SavingAll");
+                        }
+                        catch (Exception ex) {
+                            logger.fatal("Unknown fatal error in SavingAll");
+                        }
                     }
                 }
             }
@@ -103,7 +134,23 @@ public class FormHangar {
                     fd.setVisible(true);
                     String filename = fd.getDirectory() + fd.getFile();
                     if (filename.contains(".txt")) {
-                        if (hangarsCollection.SaveSingleHangarFile(filename, list_box.getSelectedValue().toString())) ReloadLevels();
+                        try {
+                            hangarsCollection.SaveSingleHangarFile(filename, list_box.getSelectedValue().toString());
+                            ReloadLevels();
+                            logger.info("single saved");
+                        }
+                        catch (FileNotFoundException ex) {
+                            logger.error("file not found exception in SavingSingle");
+                        }
+                        catch (IOException ex) {
+                            logger.error("io error in SavingSingle");
+                        }
+                        catch (IllegalArgumentException ex) {
+                            logger.error("illegal argument in SavingSingle");
+                        }
+                        catch (Exception ex) {
+                            logger.fatal("Unknown fatal error in SavingSingle");
+                        }
                     }
                 }
             }
@@ -117,7 +164,22 @@ public class FormHangar {
                 fd.setVisible(true);
                 String filename = fd.getDirectory() + fd.getFile();
                 if (filename.contains(".txt")) {
-                    if (!hangarsCollection.LoadData(filename)) return;
+                    try {
+                        hangarsCollection.LoadData(filename);
+                        logger.info("data loaded");
+                    }
+                    catch (HangarOverflowException ex) {
+                        logger.warn("hangar overflow exception in Loading");
+                    }
+                    catch (FileNotFoundException ex) {
+                        logger.error("file not found error in Loading");
+                    }
+                    catch (IOException ex) {
+                        logger.error("io error in Loading");
+                    }
+                    catch (Exception ex) {
+                        logger.fatal("Unknown fatal error in Loading");
+                    }
                 }
                 ReloadLevels();
             }
@@ -162,6 +224,7 @@ public class FormHangar {
                 }
                 hangarsCollection.AddHangar(textFieldHangar.getText());
                 ReloadLevels();
+                logger.info("added hangar " + textFieldHangar.getText());
             }
         });
 
@@ -173,6 +236,7 @@ public class FormHangar {
         list_box.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 Draw();
+                if (!list_box.isSelectionEmpty()) logger.info("selected hangar " + list_box.getSelectedValue().toString());
             }
         });
 
@@ -187,6 +251,7 @@ public class FormHangar {
                     if (JOptionPane.showConfirmDialog(w,
                             "Are you want to delete hangar " + list_box.getSelectedValue().toString() + "?",
                             "Confirm", JOptionPane.YES_NO_OPTION) == 0) {
+                        logger.info("deleted hangar" + (String)list_box.getSelectedValue());
                         hangarsCollection.DelHangar((String)list_box.getSelectedValue());
                         ReloadLevels();
                     }
@@ -235,12 +300,23 @@ public class FormHangar {
                         place = Integer.parseInt(textFieldPlace.getText());
                     }
                     catch (NumberFormatException ex) {
+                        logger.error("not int in text field for deleting");
                         return;
                     }
 
-                    Vehicle plane = hangarsCollection.getValue(list_box.getSelectedValue().toString()).Remove(place);
-                    if (plane != null) deleted.add(plane);
-                    Draw();
+                    try {
+                        logger.info("deleted plane from place " + place + " from hangar" + list_box.getSelectedValue().toString());
+                        Vehicle plane = hangarsCollection.getValue(list_box.getSelectedValue().toString()).Remove(place);
+                        if (plane != null) deleted.add(plane);
+                        Draw();
+                    }
+                    catch (HangarNotFoundException ex) {
+                        logger.warn("hangar not found exception in deleting");
+                        JOptionPane.showMessageDialog(w, "Place " + place + " is empty");
+                    }
+                    catch (Exception ex) {
+                        logger.fatal("Unknown fatal error in Deleting plane");
+                    }
                 }
             }
         });
@@ -267,12 +343,14 @@ public class FormHangar {
                         ind = Integer.parseInt(textFieldDeleted.getText());
                     }
                     catch (NumberFormatException ex) {
+                        logger.error("not int in text field for moving");
                         return;
                     }
 
                     if (ind < 0 || ind > deleted.size()) return;
 
                     if (deleted.get(ind) != null) {
+                        logger.info("moving plane from deleted array place " + ind);
                         FormPlane form = new FormPlane();
                         form.SetPlane(deleted.get(ind));
                         deleted.remove(ind);

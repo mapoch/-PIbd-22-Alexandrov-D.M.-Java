@@ -19,7 +19,9 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
         _places = new ArrayList<TP>();
     }
 
-    public int Add(TP plane) {
+    public int Add(TP plane) throws HangarOverflowException {
+        if (_places.size() >= max_count) throw new HangarOverflowException();
+
         int i = 0;
         int j = 0;
 
@@ -49,8 +51,8 @@ public class Hangar<TP extends ITransport, TA extends Additionals_Draw> {
         return -1;
     }
 
-    public TP Remove(int index) {
-        if (index >= _places.size() || index < 0) return null;
+    public TP Remove(int index) throws HangarNotFoundException {
+        if (index >= _places.size() || index < 0) throw new HangarNotFoundException(index);
         if (_places.get(index) != null)
         {
             TP ret_T = _places.get(index);

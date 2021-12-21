@@ -1,5 +1,4 @@
 package com.company;
-import org.omg.CORBA.Environment;
 
 import javax.swing.*;
 import java.io.*;
@@ -59,12 +58,12 @@ public class HangarsCollection {
         return hangar.getPlane(indP);
     }
 
-    public boolean SaveFile(String filename) {
+    public void SaveFile(String filename) throws FileNotFoundException, IOException{
         FileOutputStream fs = null;
         try {
             fs = new FileOutputStream(filename);
         }
-        catch (FileNotFoundException ex) { return false; }
+        catch (FileNotFoundException ex) { throw new FileNotFoundException("SaveFile function"); }
 
         OutputStreamWriter sw = new OutputStreamWriter(fs);
 
@@ -88,19 +87,19 @@ public class HangarsCollection {
             sw.close();
         }
         catch (IOException ex) {
-            return false;
+            throw new IOException("SaveFile function");
         }
-        return true;
     }
 
-    public boolean SaveSingleHangarFile(String filename, String key) {
-        if (!hangarStages.containsKey(key)) return false;
+    public void SaveSingleHangarFile(String filename, String key)
+            throws FileNotFoundException, IOException, IllegalArgumentException{
+        if (!hangarStages.containsKey(key)) throw new IllegalArgumentException();
 
         FileOutputStream fs = null;
         try {
             fs = new FileOutputStream(filename);
         }
-        catch (FileNotFoundException ex) { return false; }
+        catch (FileNotFoundException ex) { throw new FileNotFoundException("SaveSingleHangar function"); }
 
         OutputStreamWriter sw = new OutputStreamWriter(fs);
 
@@ -124,17 +123,16 @@ public class HangarsCollection {
             sw.close();
         }
         catch (IOException ex) {
-            return false;
+            throw new IOException("SaveSingleHangar function");
         }
-        return true;
     }
 
-    public boolean LoadData(String filename) {
+    public void LoadData(String filename) throws FileNotFoundException, IOException, IllegalArgumentException, HangarOverflowException {
         FileInputStream fs = null;
         try {
             fs = new FileInputStream(filename);
         }
-        catch (FileNotFoundException ex) { return false; }
+        catch (FileNotFoundException ex) { throw new FileNotFoundException(); }
 
         BufferedReader sr = new BufferedReader(new InputStreamReader(fs));
         try {
@@ -143,9 +141,10 @@ public class HangarsCollection {
                 hangarStages.clear();
             }
             else if (line.contains("SingleHangar")) {
-                return AddSingleHangar(sr);
+                AddSingleHangar(sr);
+                return;
             }
-            else return false;
+            else throw new IllegalArgumentException("LoadData function");
 
             Vehicle plane = null;
             String key = "";
@@ -165,17 +164,16 @@ public class HangarsCollection {
                 else if (line.split(separator)[0].equals("Plane_bomber")) {
                     plane = new Plane_bomber(line.split(separator)[1]);
                 }
-                int result = hangarStages.get(key).Add(plane);
-                if (result == -1) return false;
+
+                hangarStages.get(key).Add(plane);
             }
         }
         catch (IOException ex) {
-            return false;
+            throw new IOException("LoadData function");
         }
-        return true;
     }
 
-    public boolean AddSingleHangar(BufferedReader sr) throws IOException{
+    public void AddSingleHangar(BufferedReader sr) throws IOException, IllegalArgumentException, HangarOverflowException{
         String key = null;
         Vehicle plane = null;
 
@@ -185,7 +183,7 @@ public class HangarsCollection {
             if (hangarStages.containsKey(key)) hangarStages.get(key).Clear();
             else AddHangar(key);
         }
-        else return false;
+        else throw new IllegalArgumentException("AddSingle function");
 
         while ((line = sr.readLine()) != null) {
             if (line == null || line.isEmpty()) {
@@ -197,9 +195,8 @@ public class HangarsCollection {
             else if (line.split(separator)[0].equals("Plane_bomber")) {
                 plane = new Plane_bomber(line.split(separator)[1]);
             }
-            int result = hangarStages.get(key).Add(plane);
-            if (result == -1) return false;
+
+            hangarStages.get(key).Add(plane);
         }
-        return true;
     }
 }
