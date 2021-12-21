@@ -2,20 +2,16 @@ package com.company;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.security.auth.login.Configuration;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Random;
 
 import org.apache.log4j.*;
-import org.apache.log4j.spi.ErrorHandler;
-import org.apache.log4j.spi.Filter;
-import org.apache.log4j.spi.LoggingEvent;
+import javax.mail.*;
 
 public class FormHangar {
     private HangarsCollection hangarsCollection;
@@ -92,15 +88,10 @@ public class FormHangar {
         w.setSize(1101, 648);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        PatternLayout patternLayout = new PatternLayout();
-        patternLayout.setConversionPattern("%5p %c{1}:%L - %m (%d{дата dd.MM.yyyy})%n");
-
-        FileAppender fileAppender = new FileAppender();
-        fileAppender.setFile("D:\\\\Logs\\\\Java\\\\logs.txt");
-        fileAppender.setLayout(patternLayout);
-        fileAppender.activateOptions();
-
-        BasicConfigurator.configure(fileAppender);
+        try {
+            PropertyConfigurator.configure(new FileInputStream("src/com/company/resources/log4j.properties"));
+        }
+        catch (Exception ex) {}
 
         JMenuItem saveB = new JMenuItem("Save all to file");
 
@@ -126,7 +117,7 @@ public class FormHangar {
                             logger.error("io error in SavingAll");
                         }
                         catch (Exception ex) {
-                            //new Mailer().logMail("Unknown fatal error in SavingAll");
+                            logger.fatal("Unknown fatal error in SavingAll");
                         }
                     }
                 }
@@ -157,7 +148,7 @@ public class FormHangar {
                             logger.error("io error in SavingSingle");
                         }
                         catch (Exception ex) {
-                            //new Mailer().logMail("Unknown fatal error in SavingSingle");
+                            logger.fatal("Unknown fatal error in SavingSingle");
                         }
                     }
                 }
@@ -189,7 +180,7 @@ public class FormHangar {
                         logger.error("io error in Loading");
                     }
                     catch (Exception ex) {
-                        //new Mailer().logMail("Unknown fatal error in Loading");
+                        logger.fatal("Unknown fatal error in Loading");
                     }
                 }
                 ReloadLevels();
