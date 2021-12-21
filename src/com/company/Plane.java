@@ -1,22 +1,21 @@
 package com.company;
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.util.Iterator;
 
-public class Plane extends Vehicle{
+public class Plane extends Vehicle implements Comparable<Plane> {
     protected int planeWidth = 95;
     protected int planeHeight = 70;
 
     protected String separator = ";";
 
-    public Plane(int maxSpeed, int load_Weight, Color mainColor)
-    {
+    public Plane(int maxSpeed, int load_Weight, Color mainColor) {
         Max_Speed = maxSpeed;
         Load_Weight = load_Weight;
         MainColor = mainColor;
     }
 
-    protected Plane(int maxSpeed, int load_Weight, Color mainColor, int plane_Width, int plane_Height)
-    {
+    protected Plane(int maxSpeed, int load_Weight, Color mainColor, int plane_Width, int plane_Height) {
         Max_Speed = maxSpeed;
         Load_Weight = load_Weight;
         MainColor = mainColor;
@@ -34,36 +33,30 @@ public class Plane extends Vehicle{
     }
 
     @Override
-    public void MoveObject(Direction dir)
-    {
+    public void MoveObject(Direction dir) {
         int step = Max_Speed * 100 / Load_Weight;
-        switch (dir)
-        {
+        switch (dir) {
             // вправо
             case Right:
-                if (_startX + step < _picWidth - planeWidth)
-                {
+                if (_startX + step < _picWidth - planeWidth) {
                     _startX += step;
                 }
                 break;
             //влево
             case Left:
-                if (_startX - step > 0)
-                {
+                if (_startX - step > 0) {
                     _startX -= step;
                 }
                 break;
             //вверх
             case Up:
-                if (_startY - step > 0)
-                {
+                if (_startY - step > 0) {
                     _startY -= step;
                 }
                 break;
             //вниз
             case Down:
-                if (_startY + step < _picHeight - planeHeight)
-                {
+                if (_startY + step < _picHeight - planeHeight) {
                     _startY += step;
                 }
                 break;
@@ -71,9 +64,8 @@ public class Plane extends Vehicle{
     }
 
     @Override
-    public void DrawObject(Graphics gg)
-    {
-        Graphics2D g = (Graphics2D)gg;
+    public void DrawObject(Graphics gg) {
+        Graphics2D g = (Graphics2D) gg;
 
         g.setColor(MainColor);
 
@@ -99,7 +91,7 @@ public class Plane extends Vehicle{
         tail.addPoint(_startX + 90, _startY + 50);
         g.drawPolygon(tail);
 
-        Polygon body =  new Polygon();
+        Polygon body = new Polygon();
         body.addPoint(_startX + 15, _startY + 30);
         body.addPoint(_startX + 15, _startY + 40);
         body.addPoint(_startX + 95, _startY + 40);
@@ -111,4 +103,72 @@ public class Plane extends Vehicle{
     public String toString() {
         return "" + Max_Speed + separator + Load_Weight + separator + MainColor.getRGB();
     }
+
+    public boolean equals(Plane other) {
+        if (other == null) {
+            return false;
+        }
+        if (!this.getClass().equals(other.getClass())) {
+            return false;
+        }
+        if (Max_Speed != other.Max_Speed) {
+            return false;
+        }
+        if (Load_Weight != other.Load_Weight) {
+            return false;
+        }
+        if (MainColor != other.MainColor) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Plane)) {
+            return false;
+        } else {
+            return equals((Plane) obj);
+        }
+    }
+
+    public int compareTo(Plane other) {
+        if (other instanceof Plane_bomber) return 1;
+
+        if (Max_Speed != other.Max_Speed) {
+            return Integer.compare(Max_Speed, other.Max_Speed);
+        }
+        if (Load_Weight != other.Load_Weight) {
+            return Integer.compare(Load_Weight, other.Load_Weight);
+        }
+        if (!MainColor.equals(other.MainColor)) {
+            return Integer.compare(MainColor.getRGB(), other.MainColor.getRGB());
+        }
+        return 0;
+    }
+
+
+/*
+, Iterable<Plane>
+    public Iterator<Plane> iterator() {
+        return new Iterator<Plane>() {
+            const values = Object.values(this);
+            int index = -1;
+
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public Plane next() {
+                index++;
+                return null;
+            }
+        }
+    }
+ */
 }

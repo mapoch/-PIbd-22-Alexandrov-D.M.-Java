@@ -2,7 +2,7 @@ package com.company;
 import java.awt.*;
 import java.lang.reflect.Field;
 
-public class Plane_bomber extends Plane{
+public class Plane_bomber extends Plane implements Comparable<Plane>{
     private Additionals_Draw addDraw;
 
     private Color AddColor;
@@ -145,5 +145,99 @@ public class Plane_bomber extends Plane{
     public String toString() {
         return "" + Max_Speed + separator + Load_Weight + separator + MainColor.getRGB() + separator + AddColor.getRGB() +
                 separator + Back_state + separator + Bombs_state + separator + addDraw.toString();
+    }
+
+    public boolean equals(Plane_bomber other) {
+        if (other == null)
+        {
+            return false;
+        }
+        if (!this.getClass().equals(other.getClass()))
+        {
+            return false;
+        }
+        if (Max_Speed != other.Max_Speed)
+        {
+            return false;
+        }
+        if (Load_Weight != other.Load_Weight)
+        {
+            return false;
+        }
+        if (MainColor != other.MainColor)
+        {
+            return false;
+        }
+        if (AddColor != other.AddColor)
+        {
+            return false;
+        }
+        if (Back_state != other.Back_state)
+        {
+            return false;
+        }
+        if (Bombs_state != other.Bombs_state)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (!(obj instanceof Plane_bomber))
+        {
+            return false;
+        }
+            else
+        {
+            return equals((Plane_bomber) obj);
+        }
+    }
+
+    public int getAddDrawState() {
+        if (!Bombs_state) return 0;
+        if (addDraw instanceof Inner_bombs) return 1;
+        if (addDraw instanceof Outer_bombs) return 2;
+        if (addDraw instanceof Outer_rockets) return 3;
+        return 0;
+    }
+
+    public int compareTo(Plane plane) {
+        if (plane instanceof Plane) return -1;
+        Plane_bomber other = (Plane_bomber) plane;
+
+        if (Max_Speed != other.Max_Speed)
+        {
+            return Integer.compare(Max_Speed, other.Max_Speed);
+        }
+        if (Load_Weight != other.Load_Weight)
+        {
+            return Integer.compare(Load_Weight, other.Load_Weight);
+        }
+        if (!MainColor.equals(other.MainColor))
+        {
+            return Integer.compare(MainColor.getRGB(), other.MainColor.getRGB());
+        }
+        if (!getAddColor().equals(other.getAddColor()))
+        {
+            return Integer.compare(getAddColor().getRGB(), other.getAddColor().getRGB());
+        }
+        if (getBack_state() != other.getBack_state())
+        {
+            return Boolean.compare(getBack_state(), other.getBack_state());
+        }
+        if (getBombs_state() != other.getBombs_state())
+        {
+            return Boolean.compare(getBombs_state(), other.getBombs_state());
+        }
+        if (getAddDrawState() != other.getAddDrawState()) {
+            return Integer.compare(getAddDrawState(), other.getAddDrawState());
+        }
+        return 0;
     }
 }

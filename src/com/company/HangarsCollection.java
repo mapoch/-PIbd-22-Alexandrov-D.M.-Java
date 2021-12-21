@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.Map;
-import java.util.Set;
+import java.util.Iterator;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -71,7 +71,7 @@ public class HangarsCollection {
             sw.write("HangarsCollection" + System.getProperty("line.separator"));
             for (Map.Entry<String, Hangar<Vehicle, Additionals_Draw>> level : hangarStages.entrySet()) {
                 sw.write("Hangar" + separator + level.getKey() + System.getProperty("line.separator"));
-                ITransport plane = null;
+                for (ITransport plane: level.getValue())
                 for (int i = 0; (plane = level.getValue().getPlane(i)) != null; i++) {
                     if (plane != null) {
                         if (plane.getClass() == Plane.class) {
@@ -124,7 +124,8 @@ public class HangarsCollection {
         }
     }
 
-    public void LoadData(String filename) throws FileNotFoundException, IOException, IllegalArgumentException, HangarOverflowException {
+    public void LoadData(String filename) throws
+            FileNotFoundException, IOException, IllegalArgumentException, HangarOverflowException, HangarAlreadyHaveException {
         FileInputStream fs = null;
         try {
             fs = new FileInputStream(filename);
@@ -161,7 +162,6 @@ public class HangarsCollection {
                 else if (line.split(separator)[0].equals("Plane_bomber")) {
                     plane = new Plane_bomber(line.split(separator)[1]);
                 }
-
                 hangarStages.get(key).Add(plane);
             }
         }
@@ -170,7 +170,8 @@ public class HangarsCollection {
         }
     }
 
-    public void AddSingleHangar(BufferedReader sr) throws IOException, IllegalArgumentException, HangarOverflowException{
+    public void AddSingleHangar(BufferedReader sr) throws
+            IOException, IllegalArgumentException, HangarOverflowException, HangarAlreadyHaveException {
         String key = null;
         Vehicle plane = null;
 

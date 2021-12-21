@@ -131,9 +131,10 @@ public class FormPlaneConfig extends JFrame implements DragGestureListener {
             }
         });
 
-        SpinnerNumberModel spinnersModel = new SpinnerNumberModel(100, 100, 1000, 1);
+        SpinnerNumberModel spinnerSModel = new SpinnerNumberModel(100, 100, 1000, 1);
+        SpinnerNumberModel spinnerLModel = new SpinnerNumberModel(100, 100, 1000, 1);
 
-        JSpinner spinnerSpeed = new JSpinner(spinnersModel);
+        JSpinner spinnerSpeed = new JSpinner(spinnerSModel);
         spinnerSpeed.setLocation(131, 49);
         spinnerSpeed.setSize(120, 22);
         spinnerSpeed.setVisible(true);
@@ -150,7 +151,7 @@ public class FormPlaneConfig extends JFrame implements DragGestureListener {
         labelSpeed.setSize(112, 17);
         labelSpeed.setVisible(true);
 
-        JSpinner spinnerLoad = new JSpinner(spinnersModel);
+        JSpinner spinnerLoad = new JSpinner(spinnerLModel);
         spinnerLoad.setLocation(131, 75);
         spinnerLoad.setSize(120, 22);
         spinnerLoad.setVisible(true);

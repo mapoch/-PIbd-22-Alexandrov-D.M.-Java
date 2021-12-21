@@ -76,8 +76,11 @@ public class FormHangar {
                 } catch (HangarOverflowException ex) {
                     logger.warn("hangar overflow in plane Adding");
                     JOptionPane.showMessageDialog(w, "Warning: Hangar filled");
+                } catch (HangarAlreadyHaveException ex) {
+                    logger.warn("Hangar already have such plane");
+                    JOptionPane.showMessageDialog(w, "Warning: Hangar already have such plane");
                 } catch (Exception ex) {
-                    //new Mailer().logMail("Unknown fatal error in plane Adding");
+                    logger.fatal("Unknown fatal error in plane Adding");
                 }
             }
         }
@@ -176,6 +179,9 @@ public class FormHangar {
                     catch (HangarOverflowException ex) {
                         logger.warn("hangar overflow exception in Loading");
                     }
+                    catch (HangarAlreadyHaveException ex) {
+                        logger.warn("hangar already have this model of plane");
+                    }
                     catch (FileNotFoundException ex) {
                         logger.error("file not found error in Loading");
                     }
@@ -264,6 +270,21 @@ public class FormHangar {
             }
         });
 
+        Button buttonSort = new Button("Sort");
+        buttonSort.setLocation(906, 230);
+        buttonSort.setSize(165, 45);
+        buttonSort.setVisible(true);
+
+        buttonSort.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (list_box.getSelectedIndex() > -1) {
+                    hangarsCollection.getValue(list_box.getSelectedValue().toString()).Sort();
+                    Draw();
+                    logger.info("sorted");
+                }
+            }
+        });
+
         Button buttonSetPlane = new Button("Add plane");
         buttonSetPlane.setLocation(906, 280);
         buttonSetPlane.setSize(165, 45);
@@ -320,7 +341,7 @@ public class FormHangar {
                         JOptionPane.showMessageDialog(w, "Place " + place + " is empty");
                     }
                     catch (Exception ex) {
-                        //new Mailer().logMail("Unknown fatal error in Deleting plane");
+                        logger.fatal("Unknown fatal error in Deleting plane");
                     }
                 }
             }
@@ -370,6 +391,7 @@ public class FormHangar {
         w.add(buttonAddHangar);
         w.add(buttonDeleteHangar);
         w.add(list_box);
+        w.add(buttonSort);
         w.add(buttonSetPlane);
         w.add(labelUnset);
         w.add(labelPlace);
